@@ -29,32 +29,6 @@ if(username == null) {
     username = "You";
 }
 
-function getLocalIPv4() {
-    return new Promise((resolve, reject) => {
-        const pc = new RTCPeerConnection();
-        pc.createDataChannel("");
-        pc.createOffer()
-            .then(offer => pc.setLocalDescription(offer))
-            .catch(error => reject(error));
-        
-        pc.onicecandidate = event => {
-            if (event.candidate) {
-                const candidate = event.candidate.candidate;
-                const sdpMid = event.candidate.sdpMid;
-                if (candidate.includes("typ host") && sdpMid === "") {
-                    const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/;
-                    const match = ipRegex.exec(candidate);
-                    if (match) {
-                        resolve(match[0]);
-                    } else {
-                        reject("IPv4 address not found.");
-                    }
-                }
-            }
-        };
-    });
-}
-
 function saveToLocalStorage(key, value) {
     localStorage.setItem(key, value);
     console.log(`Saved '${value}' to local storage under the key '${key}'`);
@@ -223,17 +197,34 @@ function changeIP() {
 }
 
 function resetConversation() {
-    document.getElementById("chat")
-    .innerHTML = `<div class="message">
-    <img src="https://img.icons8.com/ios/50/c6cacf/info--v1.png" alt="info--v1"/>
-    <div class="message-text">
-        <h3>System</h3>
-        <h4>This is the start of your conversation with Nano.</h4>
-    </div>
-</div>`;
+    var chatElement = document.getElementById("chat");
+    var currentHTML = chatElement.innerHTML;
+
+    // Create the new HTML content
+    var newHTML = `<div class="message">
+                        <img src="https://img.icons8.com/ios/50/c6cacf/info--v1.png" alt="info--v1"/>
+                        <div class="message-text">
+                            <h3>System</h3>
+                            <h4>This is the start of your conversation with Nano.</h4>
+                        </div>
+                    </div>`;
+
+    chatElement.style.opacity = 0;
+    chatElement.style.transition = "opacity 0.3s";
+
+
+    // Set the new HTML content after a short delay to allow the transition to occur
+    setTimeout(function() {
+        chatElement.innerHTML = newHTML;
+        
+        chatElement.style.opacity = 1;
+        chatElement.style.transition = "opacity 0.3s";
+    }, 100);
+
     resetConvo = true;
     callAI("CLEAR_MEMORY");
 }
+
 
 function appendMessage(username, pfp, content) {
     const chat = document.getElementById("chat");
