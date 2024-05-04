@@ -8,7 +8,7 @@ if(serverUrl == null) {
     if(last != "/") { target = "/" + target }
     serverUrl += target;
 
-    if(!serverUrl.includes("http://")) {
+    if(!serverUrl.includes("http://") && !serverUrl.includes("https://")) {
         serverUrl = "http://" + serverUrl;
     }
 }
