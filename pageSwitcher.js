@@ -3,10 +3,13 @@ serverUrl = getFromLocalStorage("ip");
 if(serverUrl == null) {
     appendMessage("System", "https://img.icons8.com/ios/50/c6cacf/info--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
 } else {
-    let last = serverUrl.charAt(serverUrl.length - 1);
-    target = "query";
-    if(last != "/") { target = "/" + target }
-    serverUrl += target;
+    const lastChar = serverUrl.charAt(serverUrl.length - 1);
+
+    if(lastChar == '/' && !serverUrl.includes("query")) {
+        serverUrl += "query";
+    } else if(!serverUrl.includes("/query")) {
+        serverUrl += "/query";
+    }
 
     if(!serverUrl.includes("http://") && !serverUrl.includes("https://")) {
         serverUrl = "http://" + serverUrl;
