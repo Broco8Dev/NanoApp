@@ -91,6 +91,9 @@ body {
     border-radius: 7px;
     border: none;
     outline: 1px solid rgba(0, 0, 0, 0.103);
+    font-family: "Varela Round", sans-serif;
+    font-weight: 500;
+    font-style: normal;
 }
 
 #file-input {

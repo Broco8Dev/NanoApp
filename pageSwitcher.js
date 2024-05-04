@@ -99,7 +99,7 @@ function importPFP() {
                 var ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, 80, 80);
 
-                var base64String = canvas.toDataURL('image/png'); // or 'image/jpeg'
+                var base64String = canvas.toDataURL('image/png');
                 if(base64String != "" ) {
                 importedPFP = base64String;
                 }
@@ -155,6 +155,7 @@ function toggleSettings() {
 
 function handleKeyDown(event) {
     if (event.key === 'Enter' && !generatingResponse) {
+        resetConvo = false;
         const textField = document.getElementById('input1');
         const textValue = textField.value;
         textField.value = '';
@@ -193,6 +194,9 @@ function changeIP() {
 }
 
 function resetConversation() {
+    
+    resetConvo = true;
+    
     var chatElement = document.getElementById("chat");
     var currentHTML = chatElement.innerHTML;
 
@@ -214,7 +218,6 @@ function resetConversation() {
         chatElement.style.transition = "opacity 0.3s";
     }, 100);
 
-    resetConvo = true;
     callAI("CLEAR_MEMORY");
 }
 
@@ -261,17 +264,15 @@ function callAI(query) {
             if(resetConvo == false) {
                 appendMessage("System", "https://img.icons8.com/ios/50/c6cacf/info--v1.png", "Failed to reach the server or there is an issue with your server: " + response.status);
                 generatingResponse = false;
-            } else {
-                resetConvo = false;
-                generatingResponse = false;
             }
+            
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(responseData => {
         console.log("Response data:", responseData.text);
-        appendMessage("Nano", "https://cdn.discordapp.com/attachments/1233842068368003122/1235796134836834334/IMG_1679.png?ex=6635ac56&is=66345ad6&hm=26e23952b6f627ac941de4ebaeb31048d6df032262262bd3edcdeda323080bad&", responseData.text);
+        appendMessage("Nano", "nanohappy.png", responseData.text);
         generatingResponse = false;
     })
     .catch(error => {
