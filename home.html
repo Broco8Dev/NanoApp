@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+        <link rel="manifest" href="/manifest.json">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name = "viewport" content = "width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
+
+    </head>
+    <body>
+
+        <div id="settings">
+
+        </div>
+
+    <div id="chatpage" class="chatpage">
+        <nav class="navbar">
+            <img style="width: 40px; height: auto;"src="glyphLogo.png"></img>
+            <div class="navbar-button">
+                <a onclick="toggleSettings();">Settings</a>
+                <a onclick="resetConversation();">New Conversation</a>
+            </div>
+        </nav>
+
+        <div id="chat" class="chat-box">
+            <div class="message">
+                <img src="https://img.icons8.com/ios/50/c6cacf/info--v1.png" alt="info--v1"/>
+                <div class="message-text">
+                    <h3>System</h3>
+                    <h4>This is the start of your conversation with Nano.</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <input type="text" id="input1" class="chat-field" placeholder="Chat with Nano...">
+            </div>
+        </div>
+    </div>
+
+        <script src="pageSwitcher.js"></script>
+    
+        <!-- <footer class="footer">
+            <p>&copy; 2024 MyBrand. All rights reserved.</p>
+        </footer> -->
+    </body>
+</html>
