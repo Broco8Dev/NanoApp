@@ -16,7 +16,6 @@ if(serverUrl == null) {
     }
 }
 
-//const serverUrl = "http://cards-stroke.gl.at.ply.gg:27912/query";
 resetConvo = false;
 generatingResponse = false;
 settingsOpened = false;
@@ -75,12 +74,10 @@ function openSettings() {
 }
 
 function importPFP() {
-    // When the "Choose Image" button is clicked, trigger the file input click event
     document.getElementById('choose-image').addEventListener('click', function () {
         document.getElementById('file-input').click();
     });
 
-    // Process the image as soon as a file is selected
     document.getElementById('file-input').addEventListener('change', function () {
         var fileInput = document.getElementById('file-input');
         var file = fileInput.files[0];
@@ -95,29 +92,25 @@ function importPFP() {
         reader.onload = function (event) {
             var img = new Image();
             img.onload = function () {
-                // Create a canvas and set its size to 80x80
                 var canvas = document.createElement('canvas');
                 canvas.width = 80;
                 canvas.height = 80;
 
                 var ctx = canvas.getContext('2d');
-                // Draw the image to the canvas, scaling it to fit the 80x80 size
                 ctx.drawImage(img, 0, 0, 80, 80);
 
-                // Convert the canvas to a Base64 encoded string
                 var base64String = canvas.toDataURL('image/png'); // or 'image/jpeg'
                 if(base64String != "" ) {
                 importedPFP = base64String;
                 }
 
-                // Optional: Display the processed image on the screen
                 document.getElementById('display-image').src = importedPFP;
             };
 
             img.src = event.target.result;
         };
 
-        reader.readAsDataURL(file); // Read the file as a data URL (Base64 encoded)
+        reader.readAsDataURL(file);
     });
 }
 
@@ -203,7 +196,6 @@ function resetConversation() {
     var chatElement = document.getElementById("chat");
     var currentHTML = chatElement.innerHTML;
 
-    // Create the new HTML content
     var newHTML = `<div class="message">
                         <img src="https://img.icons8.com/ios/50/c6cacf/info--v1.png" alt="info--v1"/>
                         <div class="message-text">
@@ -215,8 +207,6 @@ function resetConversation() {
     chatElement.style.opacity = 0;
     chatElement.style.transition = "opacity 0.3s";
 
-
-    // Set the new HTML content after a short delay to allow the transition to occur
     setTimeout(function() {
         chatElement.innerHTML = newHTML;
         
@@ -231,12 +221,10 @@ function resetConversation() {
 
 function appendMessage(username, pfp, content) {
     const chat = document.getElementById("chat");
-    
-    // Create a new message element
+
     const messageDiv = document.createElement("div");
     messageDiv.className = "message";
 
-    // Add content to the new message
     messageDiv.innerHTML = `
         <img src="${pfp}" alt="${username}'s profile picture">
         <div class="message-text">
@@ -245,7 +233,6 @@ function appendMessage(username, pfp, content) {
         </div>
     `;
 
-    // Append the new message to the chat
     chat.appendChild(messageDiv);
 
     messageDiv.style.opacity = 0;
@@ -299,7 +286,6 @@ function callAI(query) {
     });
 }
 
-// Add event listener for keydown on the text field
 window.addEventListener('DOMContentLoaded', () => {
     const textField = document.getElementById('input1');
     textField.addEventListener('keydown', handleKeyDown);

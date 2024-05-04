@@ -29,7 +29,7 @@ body {
 }
 
 .hero {
-    position: relative; /* To position the pseudo-element correctly */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
