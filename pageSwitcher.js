@@ -1,4 +1,19 @@
-const serverUrl = "https://cards-stroke.gl.at.ply.gg:27912/query";
+serverUrl = getFromLocalStorage("ip");
+
+if(serverUrl == null) {
+    appendMessage("System", "https://img.icons8.com/ios/50/c6cacf/info--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
+} else {
+    let last = serverUrl.charAt(serverUrl.length - 1);
+    target = "query";
+    if(last != "/") { target = "/" + target }
+    serverUrl += target;
+
+    if(!serverUrl.includes("http://")) {
+        serverUrl = "http://" + serverUrl;
+    }
+}
+
+//const serverUrl = "http://cards-stroke.gl.at.ply.gg:27912/query";
 resetConvo = false;
 generatingResponse = false;
 settingsOpened = false;
@@ -12,6 +27,32 @@ if(pfp == null) {
 username = getFromLocalStorage("username")
 if(username == null) {
     username = "You";
+}
+
+function getLocalIPv4() {
+    return new Promise((resolve, reject) => {
+        const pc = new RTCPeerConnection();
+        pc.createDataChannel("");
+        pc.createOffer()
+            .then(offer => pc.setLocalDescription(offer))
+            .catch(error => reject(error));
+        
+        pc.onicecandidate = event => {
+            if (event.candidate) {
+                const candidate = event.candidate.candidate;
+                const sdpMid = event.candidate.sdpMid;
+                if (candidate.includes("typ host") && sdpMid === "") {
+                    const ipRegex = /(?:\d{1,3}\.){3}\d{1,3}/;
+                    const match = ipRegex.exec(candidate);
+                    if (match) {
+                        resolve(match[0]);
+                    } else {
+                        reject("IPv4 address not found.");
+                    }
+                }
+            }
+        };
+    });
 }
 
 function saveToLocalStorage(key, value) {
@@ -38,6 +79,7 @@ function openSettings() {
         <input type="text" id="usernamefield" class="settings-fields" placeholder="Change Username ( Current = ${username} ) ...">
         <button onclick="importPFP();" id="choose-image" class="settings-buttons">Change Profile Picture ...</button>
         <input type="file" id="file-input" accept="image/*">
+        <input type="text" id="ipfield" class="settings-fields" placeholder="Change Hub IP ( Current = ${serverUrl} ) ...">
         <button onclick="applySettings();" class="settings-buttons">Apply All</button>
     </div>`;
 
@@ -123,6 +165,8 @@ function closeSettings() {
 
 function applySettings() {
     changeUsername();
+    changeIP();
+
     if(importedPFP != "") {
         pfp = importedPFP;
         saveToLocalStorage("pfp", pfp);
@@ -162,6 +206,20 @@ function changeUsername() {
             document.getElementById('usernamefield').placeholder = "Change Username ( Current = " + username + " ) ...";
             saveToLocalStorage("username", username);
         }
+}
+
+function changeIP() {
+    const inputField = document.getElementById("ipfield");
+    const textField = inputField;
+    const textValue = textField.value;
+
+    if(textValue != "") {
+        serverUrl = textValue;
+        textField.value = '';
+        document.getElementById('ipfield').placeholder = "Change Hub IP ( Current = " + serverUrl + " ) ...";
+        saveToLocalStorage("ip", serverUrl);
+        window.location.reload();
+    }
 }
 
 function resetConversation() {
