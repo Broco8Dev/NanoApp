@@ -1,4 +1,4 @@
-const serverUrl = "http://cards-stroke.gl.at.ply.gg:5000/query";
+const serverUrl = "http://cards-stroke.gl.at.ply.gg:27912/query";
 resetConvo = false;
 generatingResponse = false;
 settingsOpened = false;
