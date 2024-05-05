@@ -238,6 +238,10 @@ body {
     
 }
 
+.system-msg-image {
+    opacity: 0.4;
+}
+
 .settings {
     padding: 20px;
     background: white;

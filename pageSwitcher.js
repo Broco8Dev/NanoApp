@@ -1,7 +1,7 @@
 serverUrl = getFromLocalStorage("ip");
 
 if(serverUrl == null) {
-    appendMessage("System", "https://img.icons8.com/ios/50/c6cacf/info--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
+    appendMessage("System", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/error--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
 } else {
     const lastChar = serverUrl.charAt(serverUrl.length - 1);
 
@@ -201,7 +201,7 @@ function resetConversation() {
     var currentHTML = chatElement.innerHTML;
 
     var newHTML = `<div class="message">
-                        <img src="https://img.icons8.com/ios/50/c6cacf/info--v1.png" alt="info--v1"/>
+                        <img class="system-msg-image" src="https://img.icons8.com/fluency-systems-regular/48/info--v1.png" alt="info--v1"/>
                         <div class="message-text">
                             <h3>System</h3>
                             <h4>This is the start of your conversation with Nano.</h4>
@@ -262,7 +262,7 @@ function callAI(query) {
     .then(response => {
         if (!response.ok) {
             if(resetConvo == false) {
-                appendMessage("System", "https://img.icons8.com/ios/50/c6cacf/info--v1.png", "Failed to reach the server or there is an issue with your server: " + response.status);
+                appendMessage("System", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/error--v1.png", "Failed to reach the server or there is an issue with your server: " + response.status);
                 generatingResponse = false;
             }
             
@@ -277,7 +277,7 @@ function callAI(query) {
     })
     .catch(error => {
         if(resetConvo == false) {
-            appendMessage("System", "https://img.icons8.com/ios/50/c6cacf/info--v1.png", "Failed to reach the server or there is an issue with your server: " + error);
+            appendMessage("System", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/error--v1.png", "Failed to reach the server or there is an issue with your server: " + error);
             generatingResponse = false;
         } else {
             resetConvo = false;
