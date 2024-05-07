@@ -1,10 +1,10 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: "Varela Round", sans-serif;
+    font-family: "Nunito", sans-serif;
     font-weight: 500;
     font-style: normal;
-    background: #f9f9f9;
+    background: transparent;
     color: #333;
     overflow-x:hidden;
     
@@ -16,10 +16,32 @@ body {
     display: flex;
     justify-content: left;
     align-items: center;
-
     color: #141414;
     outline: 1px solid rgba(0, 0, 0, 0.103);
     padding-left: 20px;
+    border-radius: 30px;
+    margin-top: 4px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.062);
+    width: calc(100% - 69px);
+}
+
+.navbar-item {
+    width: 25px;
+    height: 25px;
+    opacity: 0.6;
+    margin-top: 5px;
+    margin-bottom: 0px;
+
+}
+
+.navbar img {
+    margin-right: 10px;
+}
+
+.navbar-parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .navbar a {
@@ -79,23 +101,39 @@ body {
 .features {
     display: flex;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+
     padding: 40px;
     justify-content: center;
     align-items: center;
 }
 
-.chat-field {
-    width: 100%;
-    height: 40px;
-    transform: translate(-5px);
-    border-radius: 7px;
-    border: none;
+.feature {
+    background: transparent;
+    padding: 10px; /* Use even padding for consistent spacing */
+    text-align: center;
+    border-radius: 70px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.055);
+    width: calc(100% - 60px); /* Adjusted width to align with padding */
+    position: fixed;
+    bottom: 25px;
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
     outline: 1px solid rgba(0, 0, 0, 0.103);
-    font-family: "Varela Round", sans-serif;
-    font-weight: 500;
-    font-style: normal;
 }
+
+.chat-field {
+    width: 100%; /* Ensures the chat field uses full available width */
+    height: 40px;
+    border-radius: 30px;
+    border: none;
+    font-family: "Nunito", sans-serif;
+    font-weight: 500;
+    background: transparent;
+    padding: 0 10px; /* Optional padding for input text */
+    outline: 1px solid rgba(0, 0, 0, 0.103);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.062); /* For a subtle inner shadow */
+}
+
 
 #file-input {
     display: none;
@@ -141,8 +179,8 @@ body {
     border-radius: 7px;
     height: 40px;
     color: rgb(129, 129, 129);
-    font-family: "Varela Round", sans-serif;
-    font-weight: 200;
+    font-family: "Nunito", sans-serif;
+    font-weight: 400;
     font-style: normal;
     transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
     cursor: pointer;
@@ -165,9 +203,10 @@ body {
     border-radius: 7px;
     border: none;
     outline: 1px solid rgba(0, 0, 0, 0.103);
-    font-family: "Varela Round", sans-serif;
+    font-family: "Nunito", sans-serif;
     font-weight: 500;
     font-style: normal;
+    background-color: transparent;
 }
 
 
@@ -178,17 +217,7 @@ body {
     height: 100%;
 }
 
-.feature {
-    background: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 100px);
-    position: fixed;
-    bottom: 25px;
-    outline: 1px solid rgba(0, 0, 0, 0.103);
-}
+
 
 .message {
     display: flex;
@@ -205,6 +234,7 @@ body {
     border-radius: 8px;
     outline: 1px solid rgba(0, 0, 0, 0.103);
     transform: translateY(16px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.062);
 }
 
 .message h3 {
@@ -217,34 +247,31 @@ body {
 .message h4 {
     text-decoration: none;
     color: #555555;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .chat-box {
-    gap: 15px;
-    padding: 20px;
-    background: white;
+    padding: 19.5px 25px;
+    background: transparent;
     text-align: left;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.062);
     width: calc(100% - 100px);
     position: fixed;
-    bottom: 130px;
+    bottom: 105px;
     left: 50%;
-    height: calc(100% - 235px);
+    height: calc(100% - 205px);
     transform: translateX(-50%);
     outline: 1px solid rgba(0, 0, 0, 0.103);
     overflow-y: scroll;
-    
 }
 
 .system-msg-image {
-    opacity: 0.4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.712);
 }
 
 .settings {
     padding: 20px;
-    background: white;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: calc(100% - 100px);
@@ -286,7 +313,7 @@ body {
   }
 
 .chat-field::placeholder {
-    font-family: "Varela Round", sans-serif;
+    font-family: "Nunito", sans-serif;
     font-weight: 500;
     font-style: normal;
 }
