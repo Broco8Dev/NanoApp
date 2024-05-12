@@ -6,7 +6,7 @@ var importedImage = null;
 var menuOpen = false;
 
 if(serverUrl == null) {
-    appendMessage("System Warning", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/error--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
+    appendMessage("System Warning", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/box-important--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
 } else {
     const lastChar = serverUrl.charAt(serverUrl.length - 1);
 
