@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&family=M+PLUS+Rounded+1c&family=Quicksand:wght@300..700&family=Varela+Round&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@100;300;400;500;700;800;900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Reddit+Sans+Condensed:wght@200..900&display=swap" rel="stylesheet">
         <link rel="manifest" href="manifest.json">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -18,23 +19,24 @@
     </head>
     <body>
 
-        <div id="settings">
+        <div class="settings-parent" id="settings">
 
         </div>
 
     <div id="chatpage" class="chatpage">
         <div class="navbar-parent">
-        <nav class="navbar noinvert">
-            <img class="noinvert" style="width: 40px; height: auto;"src="glyphLogo.png"></img>
-            <div class="navbar-button">
-                <img onclick="toggleSettings();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/settings--v1.png" alt="settings--v1"/>
-                <img onclick="resetConversation();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/add-to-chat.png" alt="settings--v1"/>
+        <nav class="navbar noinvert" id="navbar">
+            <div class="navbar-emblem">
+            <img src="glyphLogo.png"></img>
+        </div>
+            <div class="navbar-button" id="navbar-buttons">
+                <img onclick="openMenu();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/xbox-menu.png" alt="settings--v1"/>
                 <!-- <a onclick="swapColor();">Toggle Theme</a> -->
             </div>
         </nav>
     </div>
 
-        <div id="chat" class="chat-box invert">
+        <div id="chat" class="chat-box">
             <div class="message">
                 <img class="system-msg-image" src="https://img.icons8.com/fluency-systems-regular/70/info--v1.png" alt="info--v1"/>
                 <div class="message-text">
@@ -44,26 +46,28 @@
             </div>
         </div>
 
-        <div class="features noshadowinvert">
-            <div class="feature noshadowinvert invert">
+        <div class="imported-pending" id="imported-pending">
+            
+        </div>
+
+        <div class="features">
+            <div class="feature">
                 <input type="text" id="input1" class="chat-field" placeholder="Chat with Nano...">
+                <div class="chatbar-button">
+                    <img onclick="importFile();" width="30" height="30" src="https://img.icons8.com/fluency-systems-regular/96/plus.png" alt="plus"/>
+                </div>
+                <div class="chatbar-button">
+                    <img onclick="confirmMessage();" width="30" height="30" src="https://img.icons8.com/fluency-systems-regular/96/send-letter.png" alt="plus"/>
+                </div>
+
+                
+
             </div>
+
+
         </div>
     </div>
 
         <script src="pageSwitcher.js"></script>
     </body>
-    <script>
-        const elem = document.getElementsByClassName("invert");
-        const skips = document.getElementsByClassName("noinvert");
-
-        const noshadow = document.getElementsByClassName("noshadowinvert");
-        let previousGlobValue = null;
-        const originalBoxShadows = [];
-
-        for (let i = 0; i < noshadow.length; i++) {
-            const computedStyle = window.getComputedStyle(noshadow[i]);
-            originalBoxShadows.push(computedStyle.boxShadow);
-        }
-    </script>
 </html>

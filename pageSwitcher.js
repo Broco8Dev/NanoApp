@@ -1,8 +1,12 @@
 serverUrl = getFromLocalStorage("ip");
 var lightMode = true;
 
+var importedImage = null;
+
+var menuOpen = false;
+
 if(serverUrl == null) {
-    appendMessage("System", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/error--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
+    appendMessage("System Warning", "https://img.icons8.com/fluency-systems-regular/48/a52a2a/error--v1.png", "There is no nVision Hub IP Added. Check our tutorials to learn how to set up the hub locally or across networks.");
 } else {
     const lastChar = serverUrl.charAt(serverUrl.length - 1);
 
@@ -51,25 +55,6 @@ function changeIFrameSource(newSource) {
 function openSettings() {
     const settingsContainer = document.getElementById("settings");
     bg = "";
-    if(!lightMode) {
-        settingsContainer.innerHTML = `
-        <div class="settings" style="background-color:rgb(49, 50, 63); outline: 1px solid rgba(255, 255, 255, 0.103);">
-            <img class="button" onclick="toggleSettings();" width="30" height="30" src="https://img.icons8.com/ios/120/c6cacf/delete-sign--v1.png" alt="delete-sign--v1"/>
-    
-            <h3 style="margin-bottom: 0px; filter: invert(1);">Customization</h3>
-            <input style="filter: invert(1);" type="text" id="usernamefield" class="settings-fields" placeholder="Change Username ( Current = ${username} ) ...">
-            <button style="filter: invert(1);" onclick="importPFP();" id="choose-image" class="settings-buttons">Change Profile Picture ...</button>
-            <button style="filter: invert(1);" onclick="swapColor(); openSettings();" id="choose-image" class="settings-buttons">Toggle Theme</button>
-    
-            <h3 style="margin-bottom: 0px; filter: invert(1);">Advanced</h3>
-            <input type="file" id="file-input" accept="image/*">
-            <input style="filter: invert(1);" type="text" id="ipfield" class="settings-fields" placeholder="Change Hub IP ( Current = ${serverUrl} ) ...">
-    
-            <h3 style="margin-bottom: 0px; filter: invert(1);">Apply</h3>
-            <button style="margin-top: 15px; filter: invert(1);" onclick="applySettings();" class="settings-buttons">Apply All</button>
-        </div>`;
-    
-    } else {
         settingsContainer.innerHTML = `
         <div class="settings" style="background-color:white;">
             <img class="button" onclick="toggleSettings();" width="30" height="30" src="https://img.icons8.com/ios/120/c6cacf/delete-sign--v1.png" alt="delete-sign--v1"/>
@@ -86,8 +71,6 @@ function openSettings() {
             <h3 style="margin-bottom: 0px;">Apply</h3>
             <button style="margin-top: 15px;" onclick="applySettings();" class="settings-buttons">Apply All</button>
         </div>`;
-    
-    }
 
     const settingsDiv = settingsContainer.querySelector('.settings');
 
@@ -102,6 +85,68 @@ function openSettings() {
     document.getElementById("chatpage").classList.add("blurred");
     document.getElementById("chatpage").classList.add("inactive");
 }
+
+function importFile() {
+    var input = document.createElement('input');
+    input.type = 'file';
+
+    input.addEventListener('change', function() {
+        var file = this.files[0];
+
+        if (file.type.match(/^image\//)) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var base64Image = e.target.result;
+                console.log("Base64 encoded image:", base64Image);
+                var elem = document.getElementById("imported-holder");
+                
+                importedImage = base64Image.toString();
+                console.log(importedImage);
+
+                if(elem == null) {
+                    document.getElementById("imported-pending").innerHTML = '<div class="imported-holder" id="imported-holder"></div>';
+                    document.getElementById("imported-holder").innerHTML = '<img onclick="clearImportedFiles();" class="imported-del" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/48/trash--v1.png" alt="trash--v1"/>'
+                }
+
+                document.getElementById("imported-holder").innerHTML +=
+                `<img class="chatbar-image" src="${base64Image}"></img>`;
+
+                console.log("HELLO");
+                    var chatBox = document.getElementById('chat');
+                    var contentHeight = 630;
+                    chatBox.style.height = contentHeight + 'px';
+
+
+                setTimeout(() => {
+                    document.getElementById("imported-holder").classList.add('animate');
+                }, 100);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert("Please select an image file.");
+        }
+    });
+
+
+    input.click();
+}
+
+async function clearImportedFiles() {
+    importedImage = null;
+    var elem = document.getElementById("imported-holder");
+    elem.classList.remove('animate');
+
+    await delay(200);
+
+    document.getElementById("imported-pending").innerHTML = '';
+    var chatBox = document.getElementById('chat');
+    chatBox.style.height = 'calc(100vh - 200px)';
+   
+}
+
+const delay = millis => new Promise((resolve, reject) => {
+    setTimeout(_ => resolve(), millis)
+  });
 
 function importPFP() {
     document.getElementById('choose-image').addEventListener('click', function () {
@@ -153,15 +198,18 @@ function closeSettings() {
         settingsDiv.style.opacity = 0;
         settingsDiv.style.transition = 'opacity 0.2s';
 
-        setTimeout(() => {
-            settingsContainer.innerHTML = '';
-            const chatpage = document.getElementById("chatpage");
-            chatpage.classList.remove("blurred");
-            chatpage.classList.add("non-blurred");
-            document.getElementById("chatpage").classList.remove("inactive");
-        }, 500);
+        settingsDiv.addEventListener('transitionend', function(event) {
+            if (event.propertyName === 'opacity') {
+                settingsContainer.innerHTML = '';
+                const chatpage = document.getElementById("chatpage");
+                chatpage.classList.remove("blurred");
+                chatpage.classList.add("non-blurred");
+                document.getElementById("chatpage").classList.remove("inactive");
+            }
+        });
     }
 }
+
 
 function applySettings() {
     changeUsername();
@@ -185,15 +233,18 @@ function toggleSettings() {
 
 function handleKeyDown(event) {
     if (event.key === 'Enter' && !generatingResponse) {
-        resetConvo = false;
-        const textField = document.getElementById('input1');
-        const textValue = textField.value;
-        textField.value = '';
-        appendMessage(username, pfp, textValue);
-        callAI(textValue);
-        generatingResponse = true;
-        
+        confirmMessage();
     }
+}
+
+function confirmMessage() {
+    resetConvo = false;
+    const textField = document.getElementById('input1');
+    const textValue = textField.value;
+    textField.value = '';
+    appendMessage(username, pfp, textValue);
+    callAI(textValue);
+    generatingResponse = true;
 }
 
 function changeUsername() {
@@ -258,15 +309,28 @@ function appendMessage(username, pfp, content) {
     const messageDiv = document.createElement("div");
     messageDiv.className = "message";
 
-    messageDiv.innerHTML = `
-        <img class="noinvert" src="${pfp}" alt="${username}'s profile picture">
-        <div class="message-text">
-            <h3>${username}</h3>
-            <h4>${content}</h4>
-        </div>
-    `;
+    if(importedImage == null) {
+        messageDiv.innerHTML = `
+            <img src="${pfp}" alt="${username}'s profile picture">
+            <div class="message-text">
+                <h3>${username}</h3>
+                <h4>${content}</h4>
+            </div>
+        `;
+    } else {
+        console.log("Image has been sent.");
+        messageDiv.innerHTML = `
+            <img src="${pfp}" alt="${username}'s profile picture">
+            <div class="message-text">
+                <h3>${username}</h3>
+                <h4>${content}</h4>
+                <img class="sent-image" src="${importedImage}"></img>
+            </div>
+        `;
+    }
 
     chat.appendChild(messageDiv);
+
 
     messageDiv.style.opacity = 0;
     messageDiv.style.transition = "opacity 0.3s";
@@ -278,6 +342,10 @@ function appendMessage(username, pfp, content) {
 
 
 function callAI(query) {
+
+    if(importedImage != null) {
+        query += (" " + importedImage);
+    }
     const queryData = {
         query: query
     };
@@ -292,7 +360,7 @@ function callAI(query) {
     .then(response => {
         if (!response.ok) {
             if(resetConvo == false) {
-                appendMessage("System", "https://img.icons8.com/fluency-systems-regular/70/a52a2a/error--v1.png", "Failed to reach the server or there is an issue with your server: " + response.status);
+                appendMessage("System", "https://img.icons8.com/fluency-systems-regular/70/a52a2a/box-important--v1.png", "Failed to reach the server or there is an issue with your server: " + response.status);
                 generatingResponse = false;
             }
             
@@ -307,7 +375,7 @@ function callAI(query) {
     })
     .catch(error => {
         if(resetConvo == false) {
-            appendMessage("System", "https://img.icons8.com/fluency-systems-regular/70/a52a2a/error--v1.png", "Failed to reach the server or there is an issue with your server: " + error);
+            appendMessage("System", "https://img.icons8.com/fluency-systems-regular/70/a52a2a/box-important--v1.png", "Failed to reach the server or there is an issue with your server: " + error);
             generatingResponse = false;
         } else {
             resetConvo = false;
@@ -315,75 +383,40 @@ function callAI(query) {
         }
         console.error("There was an error with the request:", error);
     });
+
+    clearImportedFiles();
+}
+
+function openMenu() {
+    menuOpen = !menuOpen
+
+    elem = document.getElementById("navbar-buttons");
+    if(menuOpen) {
+        document.getElementById("navbar").style.width = '200px';
+        console.log("menu open");
+        elem.innerHTML = `
+        <img onclick="toggleSettings();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/settings--v1.png" alt="settings--v1"/>
+        <img onclick="resetConversation();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/response.png" alt="settings--v1"/>
+        <img onclick="openMenu();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/xbox-menu.png" alt="settings--v1"/>
+        `
+
+
+    } else {
+        document.getElementById("navbar").style.width = '80px';
+        console.log("menu close");
+        elem.innerHTML = `
+        <img onclick="openMenu();" class="navbar-item" width="48" height="48" src="https://img.icons8.com/fluency-systems-regular/70/xbox-menu.png" alt="settings--v1"/>
+        
+        `
+
+    }
+
+
 }
 
 function swapColor() {
     lightMode = !lightMode;
     console.log("swapcolor");
-    top.glob = lightMode;
-        if (lightMode == false) {
-            for (let i = 0; i < elem.length; i++) {
-                elem[i].style.filter = 'invert(1)';
-            }
-
-            
-        for (let i = 0; i < skips.length; i++) {
-            skips[i].style.filter = 'invert(1)';
-        }
-
-        for (let i = 0; i < noshadow.length; i++) {
-            const element = noshadow[i];
-            const computedStyle = window.getComputedStyle(element);
-            const boxShadow = computedStyle.boxShadow;
-
-            const boxShadowColorMatch = boxShadow.match(/rgba?\(([^)]+)\)/);
-
-            if (boxShadowColorMatch) {
-                const boxShadowColor = boxShadowColorMatch[0];
-                const invertedColor = invertColor(boxShadowColor);
-                const boxShadowParts = boxShadow.match(/(-?\d+px)/g) || [];
-
-                const updatedBoxShadow = `${boxShadowParts.join(' ')} ${invertedColor}`;
-                element.style.boxShadow = updatedBoxShadow;
-            } else {
-                console.log("No box shadow color found");
-            }
-        }
-        } else {
-            for (let i = 0; i < elem.length; i++) {
-                elem[i].style.filter = 'invert(0)';
-            }
-
-            for (let i = 0; i < skips.length; i++) {
-                skips[i].style.filter = 'invert(0)';
-            }
-
-            for (let i = 0; i < noshadow.length; i++) {
-                if (originalBoxShadows[i]) {
-                    noshadow[i].style.boxShadow = originalBoxShadows[i];
-                }
-            }
-        }
-
-                   
-
-
-}
-
-
-function invertColor(rgba) {
-    const colorParts = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?/i);
-
-    if (colorParts) {
-        const r = 255 - parseInt(colorParts[1]);
-        const g = 255 - parseInt(colorParts[2]);
-        const b = 255 - parseInt(colorParts[3]);
-
-        const a = colorParts[4] ? parseFloat(colorParts[4]) : 1; // Preserve alpha channel
-        return `rgba(${r}, ${g}, ${b}, ${a})`;
-    }
-
-    return rgba;
 }
 
 function handle() {
