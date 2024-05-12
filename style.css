@@ -262,31 +262,31 @@ body {
 .feature {
     margin-top: 10px;
     background: transparent;
-    padding: 10px; /* Use even padding for consistent spacing */
+    padding: 10px;
     text-align: center;
     border-radius: 70px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.055);
-    width: calc(100% - 60px); /* Adjusted width to align with padding */
+    width: calc(100% - 60px);
 
     bottom: 25px;
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
+    display: flex;
+    justify-content: center;
     outline: 1px solid rgba(0, 0, 0, 0.103);
     transition: all 0.3s ease;
 }
 
 .chat-field {
     position: relative;
-    width: 100%; /* Ensures the chat field uses full available width */
+    width: 100%;
     height: 40px;
     border-radius: 30px;
     border: none;
     font-family: "Nunito", sans-serif;
     font-weight: 500;
     background: transparent;
-    padding: 0 10px; /* Optional padding for input text */
+    padding: 0 10px;
     outline: 1px solid rgba(0, 0, 0, 0.103);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.062); /* For a subtle inner shadow */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.062);
 
 }
 
